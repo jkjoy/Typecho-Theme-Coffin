@@ -62,19 +62,19 @@
                 <?php else: ?>
                     <p class="comment-form-author">
                         <label for="author">显示名称 <span class="required">*</span></label>
-                        <input id="author" name="author" type="text" value="<?php echo $previousAuthor ?: $this->remember('author'); ?>" size="30" maxlength="245" autocomplete="name" required />
+                        <input id="author" name="author" type="text" value="<?php $this->remember('author'); ?>" size="30" maxlength="245" autocomplete="name" required />
                     </p>
                     <p class="comment-form-email">
                         <label for="mail">邮箱 <span class="required">*</span></label>
-                        <input id="mail" name="mail" type="email" value="<?php echo $previousEmail ?: $this->remember('mail'); ?>" size="30" maxlength="100" aria-describedby="email-notes" autocomplete="email" required />
+                        <input id="mail" name="mail" type="email" value="<?php $this->remember('mail'); ?>" size="30" maxlength="100" aria-describedby="email-notes" autocomplete="email" required />
                     </p>
                     <p class="comment-form-url">
                         <label for="url">网站</label>
-                        <input id="url" name="url" type="url" value="<?php echo $previousUrl ?: $this->remember('url'); ?>" size="30" maxlength="200" autocomplete="url" />
+                        <input id="url" name="url" type="url" value="<?php $this->remember('url'); ?>" size="30" maxlength="200" autocomplete="url" />
                     </p>
                     <p class="comment-form-cookies-consent">
-                        <input id="wp-comment-cookies-consent"  type="checkbox" value="yes" checked />
-                        <label for="wp-comment-cookies-consent">在此浏览器中保存我的显示名称、邮箱地址和网站地址，以便下次评论时使用。</label>
+                        <input id="comment-cookies-consent"  type="checkbox" value="yes" checked />
+                        <label for="comment-cookies-consent">在此浏览器中保存我的显示名称、邮箱地址和网站地址，以便下次评论时使用。</label>
                     </p>
                 <?php endif; ?>
                 <p class="form-submit">
@@ -158,3 +158,85 @@ function getAuthorFromCoid($coid) {
     return $comment ? $comment['author'] : '';
 }
 ?>
+
+<script type="text/javascript">
+// 页面加载时从cookie中获取评论者信息
+document.addEventListener('DOMContentLoaded', function() {
+    // 从cookie获取保存的评论信息
+    var savedAuthor = getCookie('__typecho_remember_author');
+    var savedMail = getCookie('__typecho_remember_mail');
+    var savedUrl = getCookie('__typecho_remember_url');
+    
+    // 如果存在保存的信息，填充到表单中
+    var authorInput = document.getElementById('author');
+    var mailInput = document.getElementById('mail');
+    var urlInput = document.getElementById('url');
+    var cookieConsent = document.getElementById('comment-cookies-consent');
+    
+    if (authorInput && savedAuthor) {
+        authorInput.value = savedAuthor;
+    }
+    
+    if (mailInput && savedMail) {
+        mailInput.value = savedMail;
+    }
+    
+    if (urlInput && savedUrl) {
+        urlInput.value = savedUrl;
+    }
+    
+    // 监听表单提交事件
+    var commentForm = document.getElementById('comment-form');
+    if (commentForm) {
+        commentForm.addEventListener('submit', function() {
+            // 只有当复选框被选中时才保存cookie
+            if (cookieConsent && cookieConsent.checked) {
+                if (authorInput && authorInput.value) {
+                    setCookie('__typecho_remember_author', authorInput.value, 30);
+                }
+                
+                if (mailInput && mailInput.value) {
+                    setCookie('__typecho_remember_mail', mailInput.value, 30);
+                }
+                
+                if (urlInput && urlInput.value) {
+                    setCookie('__typecho_remember_url', urlInput.value, 30);
+                }
+            } else if (cookieConsent && !cookieConsent.checked) {
+                // 如果用户取消了勾选，则删除之前保存的cookie
+                deleteCookie('__typecho_remember_author');
+                deleteCookie('__typecho_remember_mail');
+                deleteCookie('__typecho_remember_url');
+            }
+        });
+    }
+});
+
+// 设置cookie
+function setCookie(name, value, days) {
+    var expires = '';
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = '; expires=' + date.toUTCString();
+    }
+    document.cookie = name + '=' + encodeURIComponent(value) + expires + '; path=/';
+}
+
+// 获取cookie
+function getCookie(name) {
+    var nameEQ = name + '=';
+    var ca = document.cookie.split(';');
+    for(var i=0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return decodeURIComponent(c.substring(nameEQ.length, c.length));
+    }
+    return null;
+}
+
+// 删除cookie
+function deleteCookie(name) {
+    setCookie(name, '', -1);
+}
+</script>
