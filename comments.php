@@ -36,12 +36,11 @@
         <?php else: ?>   
             <center><h3>暂无评论</h3></center>
         <?php endif; ?>
-
-        <div id="respond" class="comment-respond">
+        <div class="comment-respond" id="respond-post-<?php echo $this->cid; ?>">
             <h3 id="reply-title" class="comment-reply-title">
                 发表回复
                 <small>
-                    <a rel="nofollow" id="cancel-comment-reply-link" href="#respond" style="display:none;">取消回复</a>
+                    <a rel="nofollow" id="cancel-comment-reply-link" href="#comments" style="display:none;" onclick="return TypechoComment.cancelReply();">取消回复</a>
                 </small>
             </h3>
             <form action="<?php $this->commentUrl() ?>" method="post" id="comment-form" class="comment-form" novalidate>
@@ -51,7 +50,7 @@
                 </p>
                 <p class="comment-form-comment">
                     <label for="textarea">评论 <span class="required">*</span></label>
-                    <textarea id="textarea" name="text" cols="45" rows="8" maxlength="65525" required><?php $this->remember('text'); ?></textarea>
+                    <textarea id="textarea" name="text" cols="45" rows="8" maxlength="65525" required onkeydown="if(event.ctrlKey&&event.keyCode==13){document.getElementById('submit').click();return false};"><?php $this->remember('text'); ?></textarea>
                 </p>
                 <?php if($this->user->hasLogin()): ?>
                     <p>登录身份: 
@@ -63,25 +62,24 @@
                 <?php else: ?>
                     <p class="comment-form-author">
                         <label for="author">显示名称 <span class="required">*</span></label>
-                        <input id="author" name="author" type="text" value="<?php $this->remember('author'); ?>" size="30" maxlength="245" autocomplete="name" required />
+                        <input id="author" name="author" type="text" value="<?php echo $previousAuthor ?: $this->remember('author'); ?>" size="30" maxlength="245" autocomplete="name" required />
                     </p>
                     <p class="comment-form-email">
                         <label for="mail">邮箱 <span class="required">*</span></label>
-                        <input id="mail" name="mail" type="email" value="<?php $this->remember('mail'); ?>" size="30" maxlength="100" aria-describedby="email-notes" autocomplete="email" required />
+                        <input id="mail" name="mail" type="email" value="<?php echo $previousEmail ?: $this->remember('mail'); ?>" size="30" maxlength="100" aria-describedby="email-notes" autocomplete="email" required />
                     </p>
                     <p class="comment-form-url">
                         <label for="url">网站</label>
-                        <input id="url" name="url" type="url" value="<?php $this->remember('url'); ?>" size="30" maxlength="200" autocomplete="url" />
+                        <input id="url" name="url" type="url" value="<?php echo $previousUrl ?: $this->remember('url'); ?>" size="30" maxlength="200" autocomplete="url" />
                     </p>
                     <p class="comment-form-cookies-consent">
-                        <input id="wp-comment-cookies-consent" name="wp-comment-cookies-consent" type="checkbox" value="yes" checked />
+                        <input id="wp-comment-cookies-consent"  type="checkbox" value="yes" checked />
                         <label for="wp-comment-cookies-consent">在此浏览器中保存我的显示名称、邮箱地址和网站地址，以便下次评论时使用。</label>
                     </p>
                 <?php endif; ?>
                 <p class="form-submit">
-                    <input name="submit" type="submit" id="submit" class="submit" value="发表评论" />
-                    <?php $security = $this->security->getToken($this->request->getReferer()); ?>
-                    <input type="hidden" name="_" value="<?php echo $security; ?>" />
+                    <input name="submit" type="submit" id="submit" class="submit" value="发表评论 (Ctrl+Enter)" />
+                    <input type="hidden" name="_" value="" />
                 </p>
             </form>
         </div>
@@ -113,7 +111,7 @@ function threadedComments($comments, $options) {
         $commentClass .= ' thread-odd thread-alt';
     }
     ?>
-    <li class="comment <?php echo $commentClass; ?>" itemtype="http://schema.org/Comment" data-id="<?php $comments->theId(); ?>" itemscope="" itemprop="comment" id="comment-<?php $comments->theId(); ?>">
+    <li class="comment <?php echo $commentClass; ?>" data-id="<?php $comments->theId(); ?>" id="<?php $comments->theId(); ?>">
         <div class="comment--block">
             <div class="comment--info">
                 <div class="comment--avatar">
@@ -126,7 +124,7 @@ function threadedComments($comments, $options) {
                         <?php else: ?>
                             <?php echo $comments->author; ?>
                         <?php endif; ?>
-                        <span class="comment-reply-link" onclick="return TypechoComment.reply('comment-<?php $comments->theId(); ?>', <?php $comments->theId(); ?>);">回复</span>
+                        <div class="comment-reply-link"><?php $comments->reply('回复'); ?></div>
                     </div>
                     <div class="comment--time humane--time" itemprop="datePublished" datetime="<?php $comments->date('c'); ?>">
                         <?php $comments->date('n 月 j,Y'); ?>
@@ -135,7 +133,11 @@ function threadedComments($comments, $options) {
             </div>
             <div class="comment--content comment-content" itemprop="description">
                 <?php if ($comments->parent) { ?>
-                    <p><a href="#comment-<?php echo $comments->parent; ?>" class="comment--parent__link">@<?php echo getAuthorFromCoid($comments->parent); ?></a><?php $comments->content(); ?></p>
+                    <p>
+                        <a href="#comment-<?php echo $comments->parent; ?>" class="comment--parent__link">
+                            @<?php echo getAuthorFromCoid($comments->parent); ?>
+                        </a>
+                    <?php $comments->content(); ?></p>
                 <?php } else { ?>
                     <?php $comments->content(); ?>
                 <?php } ?>
