@@ -1,5 +1,4 @@
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
-<?php $this->need('head.php'); ?>
 <?php $this->need('header.php'); ?>
 <div class="layoutSingleColumn  min-height-100">
     <article class="entry" itemscope="itemscope" itemtype="http://schema.org/Article">

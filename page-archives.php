@@ -5,7 +5,6 @@
  * @package custom
  */
 if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
-<?php $this->need('head.php'); ?>
 <?php $this->need('header.php'); ?>
 <div class="layoutSingleColumn layoutSingleColumn--wide">
     <header class="page-archive-header">

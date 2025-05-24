@@ -7,6 +7,8 @@ function themeConfig($form) {
     $form->addInput($icoUrl);
     $thumbUrl = new Typecho_Widget_Helper_Form_Element_Text('thumbUrl', NULL, NULL, _t('默认缩略图地址'));
     $form->addInput($thumbUrl);
+    $sticky = new Typecho_Widget_Helper_Form_Element_Text('sticky', NULL, NULL, _t('置顶文章cid'), _t('多篇文章以`|`符号隔开'), _t('会在首页展示置顶文章。'));
+    $form->addInput($sticky);
     $instagramurl = new Typecho_Widget_Helper_Form_Element_Text('instagramurl', NULL, 'https://Instagram.com/', _t('Instagram'), _t('会在个人信息显示'));
     $form->addInput($instagramurl);
     $telegramurl = new Typecho_Widget_Helper_Form_Element_Text('telegramurl', NULL, 'https://t.me/', _t('电报'), _t('会在个人信息显示'));

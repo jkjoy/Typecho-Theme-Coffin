@@ -5,7 +5,6 @@
  * @package custom
  */
 if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
-<?php $this->need('head.php'); ?>
 <?php $this->need('header.php'); ?>
 <main class="layoutSingleColumn layoutSingleColumn--wide">
     <article class="page--single" itemscope="itemscope" itemtype="http://schema.org/Article">
