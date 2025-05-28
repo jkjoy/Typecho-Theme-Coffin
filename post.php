@@ -22,6 +22,22 @@
                 <div class="showtoc"></div>
             <?php $this->content(); ?>
             </div>
+            <div class="tag-list">
+<?php if ($this->tags): ?>
+<?php foreach ($this->tags as $tag): ?>
+<a href="<?php echo $tag['permalink']; ?>" class="tag-list--item">
+<svg viewBox="0 0 24 24" width="24" height="24">
+<g fill="none"  stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+<path d="M6.5 7.5a1 1 0 1 0 2 0a1 1 0 1 0-2 0" />
+<path d="M3 6v5.172a2 2 0 0 0 .586 1.414l7.71 7.71a2.41 2.41 0 0 0 3.408 0l5.592-5.592a2.41 2.41 0 0 0 0-3.408l-7.71-7.71A2 2 0 0 0 11.172 3H6a3 3 0 0 0-3 3" />
+</g>
+</svg>>
+<?php echo $tag['name']; ?>
+</a> 
+<?php endforeach; ?>
+<?php else: ?>
+<?php endif; ?>
+</div>
 <!-- 个人信息-->
 <?php if ($this->options->showProfile): ?>
     <div class="authorCard">

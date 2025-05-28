@@ -2064,6 +2064,12 @@ svg:not(:root) {
 .sep:before {
     content: "·"
 }
+.tag-list{flex-wrap:wrap;padding:25px 0}
+.tag-list,.tag-list a{display:flex;align-items:center}
+.tag-list a{color:var(--coffin-text-color);background-color:var(--coffin-background-gray);flex:0 0 auto;padding:3px 16px 3px 10px;border-radius:999rem;margin-right:15px;font-size:14px}
+.tag-list a svg{stroke:var(--coffin-text-color);width:166x;height:16px;margin-right:0}
+.tag-list a:hover{color:var(--coffin-text-color);background-color:var(--coffin-background-gray-light)}
+.tag-list a:hover svg{stroke:var(--coffin-text-color)}
 .sticky--post{color:red;}
 .hidden{display:none}
 .nav-links a{background-color:var(--coffin-background-gray);color:var(--coffin-text-gray);padding:3px 12px;border-radius:3px;margin-left:8px;margin-right:8px;font-size:14px}
