@@ -140,16 +140,12 @@
 
 <!-- 相关文章-->
 <section class="related--posts">
+<?php $this->related(6)->to($relatedPosts);if ($relatedPosts->have()): ?>      
     <h3 class="related--posts__title">Related Posts</h3>
-    <div class="entry--related">
-    <?php $this->related(6)->to($relatedPosts); ?>   
+    <div class="entry--related"> 
     <?php while ($relatedPosts->next()): ?>
-        <?php //$thumb = get_post_main_thumbnail($relatedPosts); ?>
             <div class="entry--related__item">
                 <a href="<?php $relatedPosts->permalink(); ?>" aria-label="<?php $relatedPosts->title(25); ?>">
-                    <!--<div class="entry--related__img">
-                            <img src="<?php //echo htmlspecialchars($thumb); ?>" class="cover" alt="<?php //$relatedPosts->title(25); ?>" />
-                    </div>-->
                     <div class="entry--related__title">
                             <?php $relatedPosts->title(25); ?>                  
                     </div>
@@ -166,6 +162,7 @@
             </div>
             <?php endwhile; ?>
     </div>
+    <?php endif; ?>  
 </section>    
 </main>
 <script>

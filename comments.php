@@ -3,7 +3,7 @@
     <?php $this->comments()->to($comments); ?>
     <?php if($this->allow('comment')): ?>
         <h3 class="comments-title">
-            <?php $this->commentsNum('0', '1', '%d'); ?> 条评论
+            <?php $this->commentsNum('0', '1', '%d'); ?> Comments
         </h3>
         <?php if ($comments->have()): ?>
             <ol class="comment-list commentlist">
