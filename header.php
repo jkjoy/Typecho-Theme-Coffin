@@ -71,7 +71,7 @@
             <form role="search" method="get" class="search-form" action="<?php $this->options->siteUrl(); ?>">
                 <label>
                     <span class="screen-reader-text">搜索</span>
-                    <input type="text" name="s" class="search-field" placeholder="搜索..." value="<?php echo htmlspecialchars($this->request->s); ?>" required/>
+                    <input type="text" name="s" class="search-field" placeholder="搜索..." value="<?php echo $this->request->s ? htmlspecialchars($this->request->s) : ''; ?>" required/>
                 </label>
                 <input type="submit" class="search-submit submit" value="搜索" />
             </form>        
